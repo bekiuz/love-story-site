@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#06070c">
 <meta name="description" content="Zuxrashga atalgan kichik hikoya.">
 <title>Zuxrash — A Little Story ✦</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <style>
 :root{--bg:#06070c;--bg2:#0d0f18;--text:#f5f4f8;--muted:#9a98a7;--line:rgba(255,255,255,.11);--violet:#b9adff;--blue:#8e9cff;--ease:cubic-bezier(.2,.8,.2,1)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(900px 600px at 18% -10%,rgba(127,109,255,.17),transparent 60%),radial-gradient(800px 600px at 110% 105%,rgba(91,119,255,.12),transparent 60%),linear-gradient(145deg,#05060a,#080a12 52%,#0c0e18);overflow-x:hidden}
@@ -62,6 +64,16 @@ main{position:relative;z-index:2}.scene{width:min(1120px,calc(100% - 26px));min-
 .gift-screen{position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:18px;background:rgba(3,4,8,.85);backdrop-filter:blur(25px);opacity:0;pointer-events:none;transition:opacity .45s ease}.gift-screen.open{opacity:1;pointer-events:auto}.gift-card{width:min(670px,100%);padding:clamp(25px,6vw,58px);border:1px solid rgba(214,205,255,.2);border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.028));box-shadow:0 40px 130px rgba(0,0,0,.52);text-align:center;transform:translateY(25px) scale(.97);transition:transform .65s var(--ease)}.gift-screen.open .gift-card{transform:none}.gift-kicker{color:#aaa5b5;font-size:11px;letter-spacing:.15em;text-transform:uppercase}.gift-title{margin:15px 0 0;font-size:clamp(38px,7vw,72px);line-height:.95;letter-spacing:-.06em}.gift-copy{margin:17px auto 0;max-width:520px;color:#9e9aa8;line-height:1.8;font-size:14px}.gift-box{position:relative;width:154px;height:128px;margin:28px auto 10px;cursor:pointer;transition:transform .3s var(--ease);filter:drop-shadow(0 23px 40px rgba(136,126,255,.22))}.gift-box:hover{transform:translateY(-6px)}.gift-base{position:absolute;left:9px;right:9px;bottom:0;height:79px;border-radius:8px 8px 16px 16px;background:linear-gradient(135deg,#b7abff,#7e8fff)}.gift-lid{position:absolute;left:3px;right:3px;top:22px;height:29px;border-radius:8px;background:linear-gradient(135deg,#ded9ff,#a2adff);z-index:2}.ribbon-v{position:absolute;left:50%;top:0;bottom:0;width:18px;transform:translateX(-50%);background:rgba(255,255,255,.27);z-index:3}.ribbon-h{position:absolute;left:0;right:0;top:36px;height:11px;background:rgba(255,255,255,.19);z-index:3}.bow{position:absolute;left:50%;top:2px;transform:translateX(-50%);width:50px;height:29px;z-index:4}.bow:before,.bow:after{content:"";position:absolute;width:25px;height:20px;border:7px solid #ede9ff;border-radius:50%}.bow:before{left:-1px;transform:rotate(-24deg)}.bow:after{right:-1px;transform:rotate(24deg)}.gift-open{display:none}.gift-screen.opening .gift-box{animation:giftOpen .85s var(--ease) both}.gift-screen.opening .gift-initial{display:none}.gift-screen.opening .gift-open{display:block;animation:giftMsg 1s var(--ease) .32s both}.gift-message{max-width:560px;margin:15px auto 0;color:#e9e5ef;font-family:Georgia,serif;font-size:clamp(20px,3.2vw,29px);line-height:1.65}
 @keyframes stars{to{background-position:20px 30px,-35px 22px,18px -24px,-20px 16px}}@keyframes lineIn{to{opacity:1;transform:none}}@keyframes letterIn{from{opacity:0;transform:translateY(25px) scale(.98);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}@keyframes ripple{to{transform:translate(-50%,-50%) scale(3);opacity:0}}@keyframes giftOpen{0%{transform:scale(.82) translateY(16px)}45%{transform:scale(1.15) translateY(-8px) rotate(-2deg)}100%{transform:scale(1) translateY(0) rotate(0)}}@keyframes giftMsg{from{opacity:0;transform:translateY(15px);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}@keyframes bdayPulse{50%{box-shadow:0 38px 150px rgba(102,92,255,.23),0 30px 100px rgba(0,0,0,.52)}}@keyframes flare{50%{transform:translateX(-50%) scale(1.23);opacity:.8}}
 @media(max-width:850px){.mem-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}.mem-card:first-child{grid-row:span 2;min-height:390px}}@media(max-width:560px){.scene{width:min(100%,calc(100% - 16px));padding:38px 0}.music{right:9px;top:9px}.hero{min-height:88svh}.head,.quiz-head{align-items:flex-start;flex-direction:column}.quiz-box{min-height:550px;padding:22px 18px}.answers{display:block;min-height:175px}.answer{width:100%;margin-bottom:10px}.answer.no{width:max-content;max-width:78%}.countdown{grid-template-columns:repeat(2,1fr)}.mem-card{min-height:185px;padding:17px;border-radius:21px}.mem-card:first-child{min-height:360px}.mem-card:first-child .mem-title{font-size:25px}.mem-title{font-size:16px}.mem-desc{font-size:11px}.mem-quote{font-size:14px}.mem-foot{font-size:9px}.btn{width:100%}}
+
+.gsap-scene{perspective:1200px}
+.scene .panel{transform-origin:50% 55%;will-change:transform,opacity,filter}
+.hero .eyebrow,.hero .name,.hero p,.hero-line,.hero .btn-row,.story-panel .kicker,.story-title,.story-text,.continue,.mem-panel .head,.mem-card,.quiz-head,.progress,.quiz-box,.bday-panel>*:not(.bday-flare),.final-panel>*{will-change:transform,opacity}
+.hero:after{animation:heroOrb 9s ease-in-out infinite}
+@keyframes heroOrb{50%{transform:translate(-22px,28px) scale(1.1)}}
+.scroll-orbit{position:absolute;left:50%;bottom:34px;width:7px;height:7px;border-radius:50%;background:#d9d3f0;box-shadow:0 0 24px 7px rgba(193,184,255,.2);transform:translateX(-50%);opacity:.55}
+.hero .btn.primary{position:relative;overflow:hidden}
+.hero .btn.primary:after{content:"";position:absolute;inset:-80% 55% -80% -55%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:translateX(-180%) rotate(14deg);transition:transform .7s ease}
+.hero .btn.primary:hover:after{transform:translateX(380%) rotate(14deg)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -100,7 +112,7 @@ main{position:relative;z-index:2}.scene{width:min(1120px,calc(100% - 26px));min-
   <p>Bu oddiy sayt emas. Bu bir inson uchun tayyorlangan, boshidan oxirigacha kichkina hikoya.</p>
   <div class="hero-line"></div>
   <p class="hero-quote">“Tayyor bo‘lsangiz, hikoyani oching.”</p>
-  <div class="btn-row"><button class="btn primary" id="start">Hikoyani ochish ✦</button></div>
+  <div class="btn-row"><button class="btn primary" id="start">Hikoyani ochish ✦</button></div><span class="scroll-orbit" aria-hidden="true"></span>
 </div></section>
 
 <section class="scene" id="story"><div class="panel story-panel">
@@ -349,7 +361,116 @@ window.addEventListener("pointermove",e=>{cursor.style.left=e.clientX+"px";curso
 window.addEventListener("touchstart",e=>{const p=e.touches[0],r=document.createElement("span");r.className="ripple";r.style.left=p.clientX+"px";r.style.top=p.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),650)},{passive:true});
 
 function celebrate(){for(let i=0;i<28;i++){const el=document.createElement("span");el.style.cssText="position:fixed;width:7px;height:10px;border-radius:2px;z-index:55;pointer-events:none;left:"+(47+Math.random()*6)+"vw;top:"+(40+Math.random()*10)+"vh;background:"+["#fff","#d7d0ff","#aeb9ff","#eeeaff"][Math.floor(Math.random()*4)]+";animation:confetti 1.3s ease-out forwards";el.style.setProperty("--x",(Math.random()*420-210)+"px");el.style.setProperty("--y",(Math.random()*330-60)+"px");document.body.appendChild(el);setTimeout(()=>el.remove(),1400)}}
+
 renderQuestion();
+
+/* Cinematic motion layer */
+(function initCinematicMotion(){
+  if(!window.gsap || !window.ScrollTrigger) return;
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  gsap.registerPlugin(ScrollTrigger);
+
+  if(reduce){
+    gsap.set(".scene .panel,.hero .eyebrow,.hero .name,.hero p,.hero-line,.hero .btn-row,.story-panel .kicker,.story-title,.story-text,.continue,.mem-panel .head,.mem-card,.quiz-head,.progress,.quiz-box,.bday-panel>*:not(.bday-flare),.final-panel>*",{clearProps:"all",opacity:1});
+    return;
+  }
+
+  gsap.timeline({defaults:{ease:"power3.out"}})
+    .from(".hero .eyebrow",{y:22,opacity:0,filter:"blur(10px)",duration:.8})
+    .from(".hero .name",{y:55,opacity:0,scale:.94,filter:"blur(14px)",duration:1.25},"-=.52")
+    .from(".hero p",{y:22,opacity:0,filter:"blur(7px)",duration:.8},"-=.72")
+    .from(".hero-line",{scaleX:0,transformOrigin:"50% 50%",duration:.7},"-=.48")
+    .from(".hero .btn-row",{y:20,opacity:0,duration:.65},"-=.35")
+    .from(".scroll-orbit",{y:-10,opacity:0,duration:.5},"-=.25");
+
+  gsap.to(".hero .name",{
+    yPercent:13,scale:.97,
+    scrollTrigger:{trigger:"#home",start:"top top",end:"bottom top",scrub:1}
+  });
+  gsap.to(".hero:after",{
+    x:90,y:100,scale:1.25,
+    scrollTrigger:{trigger:"#home",start:"top top",end:"bottom top",scrub:1.4}
+  });
+  gsap.to(".scroll-orbit",{
+    y:-90,opacity:0,
+    scrollTrigger:{trigger:"#home",start:"top top",end:"38% top",scrub:.7}
+  });
+
+  document.querySelectorAll(".scene:not(#home)").forEach((scene)=>{
+    const panel=scene.querySelector(".panel");
+    if(!panel) return;
+    gsap.fromTo(panel,
+      {y:70,opacity:0,scale:.965,rotateX:2.5,filter:"blur(9px)"},
+      {y:0,opacity:1,scale:1,rotateX:0,filter:"blur(0px)",duration:1.05,ease:"power3.out",
+       scrollTrigger:{trigger:scene,start:"top 78%",once:true}}
+    );
+  });
+
+  gsap.utils.toArray(".story-line").forEach((line,i)=>{
+    gsap.fromTo(line,{x:i%2?-26:26,opacity:0,filter:"blur(7px)"},
+      {x:0,opacity:1,filter:"blur(0px)",duration:.8,delay:i*.08,ease:"power3.out",
+       scrollTrigger:{trigger:".story-text",start:"top 74%",once:true}});
+  });
+
+  gsap.from(".story-title",{y:45,opacity:0,filter:"blur(8px)",duration:1,
+    scrollTrigger:{trigger:"#story",start:"top 72%",once:true}});
+
+  gsap.from(".mem-panel .head",{y:34,opacity:0,filter:"blur(7px)",duration:.8,
+    scrollTrigger:{trigger:"#memories",start:"top 70%",once:true}});
+  
+  gsap.utils.toArray(".mem-card").forEach((card,i)=>{
+    gsap.fromTo(card,
+      {y:54,opacity:0,scale:.96,rotateY:i%2?2:-2},
+      {y:0,opacity:1,scale:1,rotateY:0,duration:.9,delay:i*.1,ease:"power3.out",
+       scrollTrigger:{trigger:"#memories",start:"top 62%",once:true}}
+    );
+  });
+
+  gsap.from(".quiz-head",{y:32,opacity:0,filter:"blur(7px)",duration:.8,
+    scrollTrigger:{trigger:"#quiz",start:"top 72%",once:true}});
+  gsap.from(".quiz-box",{y:58,opacity:0,scale:.965,filter:"blur(10px)",duration:1,
+    scrollTrigger:{trigger:"#quiz",start:"top 67%",once:true}});
+  gsap.to("#progress",{
+    boxShadow:"0 0 24px rgba(189,180,255,.45)",
+    repeat:-1,yoyo:true,duration:1.5,ease:"sine.inOut"
+  });
+
+  gsap.from(".bday-title",{y:48,opacity:0,scale:.97,filter:"blur(9px)",duration:1.1,
+    scrollTrigger:{trigger:"#birthday",start:"top 70%",once:true}});
+  gsap.from(".bday-copy,.date-pill,.countdown,.locked",{y:25,opacity:0,stagger:.09,duration:.7,ease:"power3.out",
+    scrollTrigger:{trigger:"#birthday",start:"top 60%",once:true}});
+  
+  gsap.from(".final-title",{y:55,opacity:0,scale:.96,filter:"blur(10px)",duration:1.1,
+    scrollTrigger:{trigger:"#final",start:"top 68%",once:true}});
+  gsap.from(".final-copy,.signature,.unlock",{y:25,opacity:0,stagger:.1,duration:.7,
+    scrollTrigger:{trigger:"#final",start:"top 60%",once:true}});
+
+  document.querySelectorAll(".btn,.answer,.unlock,.mem-card").forEach(el=>{
+    el.addEventListener("pointerenter",()=>{
+      gsap.to(el,{y:-4,duration:.24,ease:"power2.out",overwrite:true});
+    });
+    el.addEventListener("pointerleave",()=>{
+      gsap.to(el,{y:0,duration:.38,ease:"power3.out",overwrite:true});
+    });
+  });
+
+  document.querySelectorAll(".scene").forEach(scene=>{
+    const panel=scene.querySelector(".panel");
+    if(!panel) return;
+    scene.addEventListener("pointermove",(e)=>{
+      if(window.innerWidth<900 || scene.id==="quiz" || scene.id==="birthday") return;
+      const r=scene.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width-.5;
+      const py=(e.clientY-r.top)/r.height-.5;
+      gsap.to(panel,{rotateY:px*1.8,rotateX:-py*1.4,duration:.65,ease:"power3.out",overwrite:true});
+    });
+    scene.addEventListener("pointerleave",()=>{
+      gsap.to(panel,{rotateY:0,rotateX:0,duration:.8,ease:"power3.out"});
+    });
+  });
+
+  ScrollTrigger.refresh();
+})();
 </script>
 <style>
 .question-anim{animation:qIn .6s var(--ease) both}
