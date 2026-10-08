@@ -241,17 +241,24 @@ const secretModal=$("secretModal");
 document.getElementById("closeSecret").addEventListener("click",()=>secretModal.classList.remove("open"));
 let audioCtx=null,musicGain=null,musicOn=false;
 $("music").addEventListener("click",toggleMusic);
-async function toggleMusic(){
+async function startMusic(){
   if(!audioCtx){
     audioCtx=new (window.AudioContext||window.webkitAudioContext)();
     musicGain=audioCtx.createGain();musicGain.gain.value=.0001;musicGain.connect(audioCtx.destination);
     [196,246.94,293.66,369.99].forEach((freq,i)=>{const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type=i%2?"sine":"triangle";osc.frequency.value=freq;gain.gain.value=.0018;osc.connect(gain);gain.connect(musicGain);osc.start()})
   }
   if(audioCtx.state==="suspended")await audioCtx.resume();
-  musicOn=!musicOn;musicGain.gain.cancelScheduledValues(audioCtx.currentTime);musicGain.gain.linearRampToValueAtTime(musicOn?.035:.0001,audioCtx.currentTime+.4);
-  $("music").classList.toggle("on",musicOn);$("musicText").textContent=musicOn?"Ambient on":"Ambient off";
+  musicOn=true;musicGain.gain.cancelScheduledValues(audioCtx.currentTime);musicGain.gain.linearRampToValueAtTime(.035,audioCtx.currentTime+.7);
+  $("music").classList.add("on");$("musicText").textContent="Ambient on";
 }
-start.addEventListener("click",()=>{if(!musicOn)toggleMusic()});
+async function toggleMusic(){
+  if(!audioCtx || !musicOn){await startMusic();return}
+  musicOn=false;musicGain.gain.cancelScheduledValues(audioCtx.currentTime);musicGain.gain.linearRampToValueAtTime(.0001,audioCtx.currentTime+.35);
+  $("music").classList.remove("on");$("musicText").textContent="Ambient off";
+}
+async function tryAutoplay(){try{await startMusic()}catch(e){}}
+tryAutoplay();
+start.addEventListener("click",()=>{if(!musicOn)startMusic()});
 
 const cursor=$("cursor");
 window.addEventListener("pointermove",e=>{cursor.style.left=e.clientX+"px";cursor.style.top=e.clientY+"px"},{passive:true});
