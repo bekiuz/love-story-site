@@ -362,6 +362,7 @@ const sectionObserver=new IntersectionObserver(entries=>{
   });
 },{threshold:[.35,.55,.75]});
 document.querySelectorAll(".scene").forEach(scene=>sectionObserver.observe(scene));
+document.body.classList.add("section-home");
 start.addEventListener("click",()=>go("story"));
 
 const memCards=[...document.querySelectorAll(".mem-card")];
@@ -414,7 +415,11 @@ function renderQuestion(){
       btn.addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();feedback.textContent="Bu tugma telefonda ham qochadi 😄";moveNo(btn)});
       btn.addEventListener("touchstart",e=>{e.preventDefault();e.stopPropagation();moveNo(btn)},{passive:false});
       btn.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();moveNo(btn)});
-    }else btn.addEventListener("click",answer);
+    }else{
+      btn.addEventListener("click",answer);
+      btn.classList.add("magnetic");
+      bindMagnetic(btn);
+    }
     answers.appendChild(btn)
   })
 }
@@ -434,6 +439,7 @@ let answersMade=0,answering=false;
 function answer(){
   if(answering)return;
   answering=true;
+  quizBox.classList.add("locked-input");
   answersMade++;
   memoryCount.textContent=String(answersMade).padStart(2,"0")+" / 10";
   feedback.textContent=reactions[index%reactions.length];
@@ -609,17 +615,21 @@ window.addEventListener("load",()=>{
 });
 const cursor=$("cursor");
 
+function bindMagnetic(el){
+  if(!window.gsap || window.matchMedia("(prefers-reduced-motion: reduce)").matches || !el || el.dataset.magneticBound==="1")return;
+  el.dataset.magneticBound="1";
+  el.addEventListener("pointermove",e=>{
+    if(window.innerWidth<800)return;
+    const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+    if(Math.hypot(dx,dy)>95){gsap.to(el,{x:0,y:0,duration:.35,ease:"power3.out",overwrite:true});return}
+    gsap.to(el,{x:dx*.10,y:dy*.10,duration:.24,ease:"power2.out",overwrite:true});
+  });
+  el.addEventListener("pointerleave",()=>gsap.to(el,{x:0,y:0,duration:.42,ease:"elastic.out(1,.55)",overwrite:true}));
+}
 function initMagnetic(){
-  if(!window.gsap || window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  document.querySelectorAll(".btn,.answer,.unlock,.music").forEach(el=>{
+  document.querySelectorAll(".btn,.answer:not(.no),.unlock,.music").forEach(el=>{
     el.classList.add("magnetic");
-    el.addEventListener("pointermove",e=>{
-      if(window.innerWidth<800)return;
-      const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
-      if(Math.hypot(dx,dy)>95){gsap.to(el,{x:0,y:0,duration:.35,ease:"power3.out",overwrite:true});return}
-      gsap.to(el,{x:dx*.10,y:dy*.10,duration:.24,ease:"power2.out",overwrite:true});
-    });
-    el.addEventListener("pointerleave",()=>gsap.to(el,{x:0,y:0,duration:.42,ease:"elastic.out(1,.55)",overwrite:true}));
+    bindMagnetic(el);
   });
 }
 setTimeout(initMagnetic,100);
