@@ -476,7 +476,7 @@ document.querySelector(".name").addEventListener("click",()=>{
   nameTapTimer=setTimeout(()=>{nameTap=0},1200);
   if(nameTap>=3){nameTap=0;showSecret(4)}
 });
-document.querySelector("footer").addEventListener("dblclick",()=>showSecret(5));
+document.addEventListener("DOMContentLoaded",()=>{const footer=document.querySelector("footer");if(footer)footer.addEventListener("dblclick",()=>showSecret(5))});
 
 let audioCtx=null,musicGain=null,musicOn=false;
 $("music").addEventListener("click",toggleMusic);
