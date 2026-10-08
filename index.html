@@ -242,6 +242,32 @@
     @media(prefers-reduced-motion:reduce){
       *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
     }
+  
+    .birthday-panel.birthday-live{border-color:rgba(215,206,255,.28);box-shadow:0 35px 130px rgba(102,91,255,.18),0 30px 100px rgba(0,0,0,.5);animation:birthdayPulse 4s ease-in-out infinite}
+    .birthday-panel.birthday-live .birthday-title{animation:titleFloat 4s ease-in-out infinite}
+    .birthday-panel.birthday-live .time-box{animation:timeLift 2.8s ease-in-out infinite}
+    .birthday-panel.birthday-live .time-box:nth-child(2){animation-delay:.12s}.birthday-panel.birthday-live .time-box:nth-child(3){animation-delay:.24s}.birthday-panel.birthday-live .time-box:nth-child(4){animation-delay:.36s}
+    .birthday-locked{margin:24px auto 0;max-width:650px;padding:13px 16px;border:1px solid var(--line);border-radius:15px;background:rgba(0,0,0,.14);color:#8c8997;font-size:13px;line-height:1.6}
+    .birthday-letter{display:none;max-width:760px;margin:28px auto 0;padding:28px;text-align:left;border:1px solid rgba(213,204,255,.2);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.028));box-shadow:0 25px 80px rgba(0,0,0,.3)}
+    .birthday-letter.open{display:block;animation:letterReveal 1.1s var(--ease) both}
+    .birthday-letter-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#9a95a9}
+    .birthday-letter h3{margin:12px 0 18px;font-size:clamp(30px,5vw,48px);letter-spacing:-.05em}
+    .birthday-letter p{margin:0;color:#d9d4df;font-family:Georgia,"Times New Roman",serif;font-size:clamp(17px,2.5vw,21px);line-height:1.9}
+    .birthday-complete .birthday-locked{display:none}.birthday-complete .date-pill,.birthday-complete .countdown{display:none}.birthday-complete .birthday-cta{display:none}.birthday-complete .birthday-letter{display:block}
+    body.birthday-live{background:radial-gradient(1000px 680px at 50% -10%,rgba(182,170,255,.2),transparent 62%),radial-gradient(800px 580px at 90% 90%,rgba(104,124,255,.13),transparent 62%),linear-gradient(150deg,#05060a,#090b15 48%,#111327)}
+    body.birthday-live::before{opacity:.48;animation-duration:8s}
+    .birthday-flare{position:absolute;width:220px;height:220px;top:7%;left:50%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(225,219,255,.11),transparent 70%);filter:blur(18px);pointer-events:none;opacity:0}
+    .birthday-panel.birthday-live .birthday-flare{opacity:1;animation:flare 3.5s ease-in-out infinite}
+    .unlock:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+    .question-entrance{animation:questionEntrance .65s var(--ease) both}
+    .answer-burst{animation:answerBurst .46s var(--ease) both}
+    @keyframes questionEntrance{from{opacity:0;transform:translateY(20px) scale(.985);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+    @keyframes answerBurst{0%{opacity:0;transform:translateY(8px) scale(.97)}100%{opacity:1;transform:none}}
+    @keyframes birthdayPulse{50%{box-shadow:0 40px 150px rgba(102,91,255,.23),0 30px 100px rgba(0,0,0,.52)}}
+    @keyframes titleFloat{50%{transform:translateY(-5px)}}@keyframes timeLift{50%{transform:translateY(-4px)}}
+    @keyframes letterReveal{0%{opacity:0;transform:translateY(28px) scale(.98);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
+    @keyframes flare{50%{transform:translateX(-50%) scale(1.22);opacity:.8}}
+
   </style>
 </head>
 <body>
@@ -312,7 +338,7 @@
       </div>
     </div></section>
 
-    <section class="scene birthday" id="birthday"><div class="panel birthday-panel reveal">
+    <section class="scene birthday" id="birthday"><div class="panel birthday-panel reveal" id="birthdayPanel"><div class="birthday-flare"></div>
       <div class="birthday-kicker">04 — alohida sana</div>
       <h2 class="birthday-title"><span class="gradient">Tug‘ilgan kuning</span> ham bu hikoyaning bir qismi.</h2>
       <p class="birthday-message">Bu sahifa aynan o‘sha kun uchun yanada maxsus bo‘lishi mumkin. Pastdagi countdown tug‘ilgan kun sanasi qo‘yilgach avtomatik ishlaydi.</p>
@@ -323,7 +349,17 @@
         <div class="time-box"><div class="time-num" id="minutes">--</div><div class="time-label">daq</div></div>
         <div class="time-box"><div class="time-num" id="seconds">--</div><div class="time-label">soniya</div></div>
       </div>
-      <div class="birthday-cta btn-row"><button class="btn primary" id="birthdayBtn">Surpriseni ochish →</button></div>
+      <div class="birthday-locked" id="birthdayLocked">🔒 Surprise 16-oktabr soat 00:00 da ochiladi.</div>
+      <div class="birthday-cta btn-row"><button class="btn primary" id="birthdayBtn" disabled>Surpriseni ochish →</button></div>
+      <div class="birthday-letter" id="birthdayLetter">
+        <div class="birthday-letter-label">16 October · for Zuxrash</div>
+        <h3><span class="gradient">Tug‘ilgan kuning muborak.</span></h3>
+        <p>Bugun sening kuning. Men bu sahifani oddiy tabrikdan ko‘ra, bir oz boshqacha xotira qoldirish uchun tayyorladim.
+        <br><br>
+        Har kuni yuzingda tabassum bo‘lishini, ko‘nglingdagi chiroyli niyatlaring amalga oshishini va oldingda juda ko‘p yaxshi kunlar bo‘lishini tilayman.
+        <br><br>
+        Bugungi kun o‘zing kabi o‘zgacha bo‘lsin. ✦</p>
+      </div>
     </div></section>
 
     <section class="scene final" id="final"><div class="panel final-panel reveal">
@@ -352,8 +388,8 @@
 
   <script>
     /* Tug‘ilgan kun sanasi: oy 1-12, kun 1-31. Hozircha sana qo‘yilmagan. */
-    const BIRTHDAY_MONTH = null;
-    const BIRTHDAY_DAY = null;
+    const BIRTHDAY_MONTH = 10;
+    const BIRTHDAY_DAY = 16;
 
     const questions = [
       {text:"Meni sevasizmi?",hint:"Birinchi savolda yolg‘on gapirish mumkin emas 😌",options:["Ha ❤️","Yo‘q 🙃"],runaway:true},
@@ -387,6 +423,9 @@
 
     const start = document.getElementById("start");
     const birthdayBtn = document.getElementById("birthdayBtn");
+    const birthdayPanel = document.getElementById("birthdayPanel");
+    const birthdayLocked = document.getElementById("birthdayLocked");
+    const birthdayLetter = document.getElementById("birthdayLetter");
     const qText = document.getElementById("qText");
     const qHint = document.getElementById("qHint");
     const qNumber = document.getElementById("qNumber");
@@ -425,6 +464,9 @@
 
     function render(){
       const q = questions[index];
+      qText.classList.remove("question-entrance");
+      void qText.offsetWidth;
+      qText.classList.add("question-entrance");
       qText.style.opacity = "0";
       qText.style.transform = "translateY(12px)";
       requestAnimationFrame(()=>{
@@ -544,8 +586,12 @@
     });
 
     birthdayBtn.addEventListener("click",()=>{
+      if(!isBirthdayToday()) return;
+      birthdayPanel.classList.add("birthday-complete","birthday-live");
+      document.body.classList.add("birthday-live");
+      birthdayLetter.classList.add("open");
+      birthdayLocked.textContent="✦ Surprise unlocked — bu sahifa aynan bugun uchun.";
       celebrate();
-      go("final");
     });
 
     unlock.addEventListener("click",()=>{
@@ -557,29 +603,48 @@
     });
 
     function nextBirthdayDate(){
-      if(!BIRTHDAY_MONTH || !BIRTHDAY_DAY) return null;
-      const now = new Date();
-      let year = now.getFullYear();
-      let target = new Date(year,BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);
-      if(target <= now) target = new Date(year+1,BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);
+      const now=new Date();
+      let year=now.getFullYear();
+      let target=new Date(year,BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);
+      if(target<=now) target=new Date(year+1,BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);
       return target;
     }
 
-    function updateCountdown(){
-      const target = nextBirthdayDate();
-      const label = document.getElementById("birthdayDateLabel");
-      if(!target){
-        label.textContent = "📅 Tug‘ilgan kun sanasi: kodga sana qo‘yilgach countdown ishlaydi";
-        ["days","hours","minutes","seconds"].forEach(id=>document.getElementById(id).textContent="--");
-        return;
-      }
-      label.textContent = "📅 " + target.toLocaleDateString("uz-UZ",{day:"2-digit",month:"long"});
-      const diff = Math.max(0,target - new Date());
-      document.getElementById("days").textContent = String(Math.floor(diff/86400000)).padStart(2,"0");
-      document.getElementById("hours").textContent = String(Math.floor(diff/3600000)%24).padStart(2,"0");
-      document.getElementById("minutes").textContent = String(Math.floor(diff/60000)%60).padStart(2,"0");
-      document.getElementById("seconds").textContent = String(Math.floor(diff/1000)%60).padStart(2,"0");
+    function isBirthdayToday(){
+      const now=new Date();
+      return now.getMonth()===BIRTHDAY_MONTH-1 && now.getDate()===BIRTHDAY_DAY;
     }
+
+    function updateCountdown(){
+      const target=nextBirthdayDate();
+      const label=document.getElementById("birthdayDateLabel");
+      const diff=isBirthdayToday() ? 0 : Math.max(0,target-new Date());
+
+      label.textContent=isBirthdayToday()
+        ? "🎂 16-oktabr — Zuxrashning kuni"
+        : "📅 16-oktabr — Zuxrashning kuni";
+
+      document.getElementById("days").textContent=String(Math.floor(diff/86400000)).padStart(2,"0");
+      document.getElementById("hours").textContent=String(Math.floor(diff/3600000)%24).padStart(2,"0");
+      document.getElementById("minutes").textContent=String(Math.floor(diff/60000)%60).padStart(2,"0");
+      document.getElementById("seconds").textContent=String(Math.floor(diff/1000)%60).padStart(2,"0");
+
+      if(isBirthdayToday()){
+        birthdayBtn.disabled=false;
+        birthdayBtn.style.opacity="1";
+        birthdayBtn.style.cursor="pointer";
+        birthdayLocked.textContent="✦ Bugun sening kuning. Surprise ochishga tayyor.";
+        birthdayPanel.classList.add("birthday-live");
+      }else{
+        birthdayBtn.disabled=true;
+        birthdayBtn.style.opacity=".45";
+        birthdayBtn.style.cursor="not-allowed";
+        birthdayLocked.textContent="🔒 Surprise 16-oktabr soat 00:00 da ochiladi.";
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown,1000);
 
     function createMusic(){
       if(audioCtx) return;
