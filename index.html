@@ -37,9 +37,38 @@
     @media(max-width:820px){.memory-grid{grid-template-columns:repeat(2,1fr)}.scene{width:min(100%,calc(100% - 18px));padding:40px 0}.hero{min-height:88svh}}
     @media(max-width:560px){.memory-grid{grid-template-columns:1fr 1fr;gap:9px}.memory-card{min-height:155px;padding:15px;border-radius:18px}.memory-title{font-size:15px}.memory-desc{font-size:12px}.section-top,.quiz-header{align-items:flex-start;flex-direction:column}.quiz-box{min-height:540px;padding:22px 18px}.answers{display:block;min-height:150px}.answer{width:100%;margin-bottom:10px}.answer.runaway{width:max-content;max-width:72%;position:relative}.hero .name{font-size:clamp(58px,21vw,105px)}.story-text{min-height:340px}.btn{width:100%}.btn-row{width:100%}.btn-row .btn{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+  
+    .music-control{position:fixed;right:18px;top:18px;z-index:25;display:inline-flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(10,10,17,.62);backdrop-filter:blur(16px);color:#d7d2e1;font-size:12px;cursor:pointer;transition:transform .25s ease,background .25s ease,border-color .25s ease}
+    .music-control:hover{transform:translateY(-2px);background:rgba(255,255,255,.075);border-color:rgba(210,201,255,.22)}
+    .music-dot{width:7px;height:7px;border-radius:50%;background:#7d8cff;box-shadow:0 0 15px #7d8cff}
+    .music-control.off .music-dot{background:#555766;box-shadow:none}
+    .touch-ripple{position:fixed;width:18px;height:18px;border-radius:50%;border:1px solid rgba(215,207,255,.65);pointer-events:none;z-index:40;transform:translate(-50%,-50%) scale(.4);animation:ripple .6s ease-out forwards}
+    .cursor-glow{position:fixed;width:170px;height:170px;border-radius:50%;pointer-events:none;z-index:1;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(180,170,255,.10),transparent 68%);mix-blend-mode:screen}
+    .secret-trigger{color:#575462;text-decoration:none;cursor:pointer;display:inline-block;margin-left:7px;transition:color .2s ease,transform .2s ease}
+    .secret-trigger:hover{color:#b9b1ce;transform:scale(1.1)}
+    .secret-screen{position:fixed;inset:0;z-index:35;display:grid;place-items:center;background:rgba(4,5,10,.82);backdrop-filter:blur(24px);opacity:0;pointer-events:none;transition:opacity .35s ease}
+    .secret-screen.open{opacity:1;pointer-events:auto}
+    .secret-box{width:min(620px,calc(100% - 30px));padding:34px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));box-shadow:var(--shadow);text-align:center}
+    .secret-box h3{margin:15px 0 10px;font-size:clamp(30px,6vw,56px);letter-spacing:-.05em}
+    .secret-box p{margin:0;color:#aaa6b5;line-height:1.8}
+    .final-locked{position:relative;max-width:780px;margin:30px auto 0;padding:28px;border:1px solid var(--line);border-radius:24px;background:rgba(0,0,0,.16)}
+    .final-lock-icon{font-size:28px;color:#c9c1dd}
+    .final-lock-copy{margin:12px 0 0;color:#8f8b9a;font-size:14px}
+    .final-reveal{display:none;position:relative;max-width:760px;margin:30px auto 0;color:#d9d4df;font-size:clamp(17px,2.6vw,21px);line-height:1.9}
+    .final.unlocked .final-locked{display:none}.final.unlocked .final-reveal{display:block;animation:lineIn .75s var(--ease) both}
+    .birthday-countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:680px;margin:28px auto 0}
+    .time-unit{padding:18px 10px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}
+    .time-unit strong{display:block;font-size:clamp(25px,5vw,44px);letter-spacing:-.04em}
+    .time-unit span{display:block;margin-top:5px;color:#777482;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+    .birthday-date-note{margin-top:14px;color:#696674;font-size:12px}
+    @keyframes ripple{to{transform:translate(-50%,-50%) scale(3);opacity:0}}
+    @media(max-width:560px){.music-control{right:10px;top:10px}.birthday-countdown{grid-template-columns:repeat(2,1fr)}}
+
   </style>
 </head>
 <body>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <button class="music-control" id="musicControl" aria-label="Musiqani yoqish"><span class="music-dot"></span><span id="musicLabel">Ambient off</span></button>
   <div class="noise"></div><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
   <main>
     <section class="scene" id="home"><div class="panel hero">
@@ -76,16 +105,43 @@
     <section class="scene birthday" id="birthday"><div class="panel birthday-panel reveal">
       <div class="birthday-kicker">04 — alohida sana</div><h2 class="birthday-title"><span class="gradient">Tug‘ilgan kuning</span> ham bu hikoyaning bir qismi.</h2>
       <p class="birthday-message">Bu joy ataylab alohida qoldirildi. Tug‘ilgan kuning kelganda shu sahifa boshqa kayfiyatga o‘tadi — alohida tilak, alohida sana va alohida surprise uchun.</p>
-      <div class="date-pill">📅 Tug‘ilgan kun sanasi — keyin shu yerga qo‘yiladi</div><div class="birthday-cta btn-row"><button class="btn primary" id="birthdayBtn">Surpriseni ochish →</button></div>
+      <div class="birthday-countdown" aria-live="polite">
+        <div class="time-unit"><strong id="days">—</strong><span>kun</span></div>
+        <div class="time-unit"><strong id="hours">—</strong><span>soat</span></div>
+        <div class="time-unit"><strong id="minutes">—</strong><span>daqiqa</span></div>
+        <div class="time-unit"><strong id="seconds">—</strong><span>soniya</span></div>
+      </div>
+      <div class="birthday-date-note" id="birthdayDateNote">Tug‘ilgan kun sanasi hali qo‘shilmagan.</div><div class="birthday-cta btn-row"><button class="btn primary" id="birthdayBtn">Surpriseni ochish →</button></div>
     </div></section>
 
-    <section class="scene final" id="final"><div class="panel final-panel reveal">
+    <section class="scene final" id="final"><div class="panel final-panel reveal" id="finalPanel">
       <div class="final-kicker">05 — oxirgi sahifa</div><h2 class="final-title"><span class="gradient">Endi mening navbatim.</span></h2>
-      <p class="final-copy">Bu saytning asl maqsadi savollarga javob olish emas. Men shunchaki oddiy gap bilan aytolmagan narsalarni bir oz chiroyliroq qilib qoldirmoqchi bo‘ldim.<br><br>Sen uchun vaqt ajratishim, biror narsa o‘ylab topishim va shu kichkina hikoyani yaratishimning o‘zi bir javob.<br><br>Tug‘ilgan kuningda esa bundan ham chiroyliroq gaplar bor. ✦</p>
-      <div class="signature">— Bekiuz</div>
+      <div class="final-locked" id="finalLocked">
+        <div class="final-lock-icon">⌁</div>
+        <div class="final-lock-copy">Oxirgi gap ataylab qulflangan. Uni ochish uchun bitta tugma qoldi.</div>
+        <div class="btn-row"><button class="btn primary" id="unlockFinal">Oxirgi xabarni ochish ✦</button></div>
+      </div>
+      <div class="final-reveal" id="finalReveal">
+        Bu saytning asl maqsadi savollarga javob olish emas.
+        Men shunchaki oddiy gap bilan aytolmagan narsalarni bir oz chiroyliroq qilib qoldirmoqchi bo‘ldim.
+        <br><br>
+        Sen uchun vaqt ajratishim, biror narsa o‘ylab topishim va shu kichkina hikoyani yaratishimning o‘zi bir javob.
+        <br><br>
+        Tug‘ilgan kuningda esa bundan ham chiroyliroq gaplar bor. ✦
+        <div class="signature">— Bekiuz</div>
+      </div>
     </div></section>
   </main>
-  <div class="toast" id="toast"></div><footer>made slowly, carefully, for one person ✦</footer>
+  <div class="toast" id="toast"></div>
+  <div class="secret-screen" id="secretScreen" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="secret-box">
+      <div class="eyebrow">you found it</div>
+      <h3><span class="gradient">Yashirin sahifa.</span></h3>
+      <p>Bu kichkina sirni topganing uchun qo‘shimcha bir gap: ba’zi narsalar hamma ko‘rishi uchun emas, faqat bitta inson topishi uchun qoldiriladi. ✦</p>
+      <div class="btn-row"><button class="btn primary" id="closeSecret">Yopish</button></div>
+    </div>
+  </div>
+  <footer>made slowly, carefully, for one person ✦ <button class="secret-trigger" id="secretTrigger" aria-label="Yashirin sahifani ochish">✦</button></footer>
   <script>
     const questions=[
       {text:"Meni sevasizmi?",hint:"Birinchi savolda yolg‘on gapirish mumkin emas 😌",options:["Ha ❤️","Yo‘q 🙃"],runaway:true},
@@ -143,6 +199,88 @@
     }
     function answer(){feedback.textContent=reactions[index%reactions.length];setTimeout(()=>{if(index<questions.length-1){index++;render()}else{celebrate();go("birthday")}},760)}
     function celebrate(){for(let i=0;i<34;i++){const el=document.createElement("span");el.className="confetti";el.style.setProperty("--x",(Math.random()*420-210)+"px");el.style.setProperty("--y",(Math.random()*330-60)+"px");el.style.background=["#fff","#d5ceff","#aeb8ff","#eeeaff"][Math.floor(Math.random()*4)];el.style.left=(50+Math.random()*8-4)+"vw";el.style.top=(40+Math.random()*8-4)+"vh";document.body.appendChild(el);setTimeout(()=>el.remove(),1400)}}
+
+    const musicControl=document.getElementById("musicControl"),musicLabel=document.getElementById("musicLabel");
+    let audioCtx=null,masterGain=null,ambientTimer=null,musicOn=false;
+
+    function startAmbient(){
+      if(musicOn)return;
+      audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+      if(audioCtx.state==="suspended")audioCtx.resume();
+      masterGain=audioCtx.createGain();
+      masterGain.gain.value=.035;
+      masterGain.connect(audioCtx.destination);
+
+      const notes=[174.61,220,261.63,329.63];
+      notes.forEach((freq,i)=>{
+        const osc=audioCtx.createOscillator();
+        const gain=audioCtx.createGain();
+        osc.type="sine";osc.frequency.value=freq;gain.gain.value=.05/(i+1);
+        osc.connect(gain);gain.connect(masterGain);osc.start();
+        setTimeout(()=>{gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+5);},3000+i*350);
+      });
+      musicOn=true;musicControl.classList.remove("off");musicLabel.textContent="Ambient on";
+    }
+
+    function stopAmbient(){
+      if(!musicOn)return;
+      try{masterGain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.35)}catch(e){}
+      musicOn=false;musicControl.classList.add("off");musicLabel.textContent="Ambient off";
+      clearTimeout(ambientTimer);
+    }
+
+    musicControl.classList.add("off");
+    musicControl.addEventListener("click",()=>musicOn?stopAmbient():startAmbient());
+    start.addEventListener("click",()=>{try{startAmbient()}catch(e){}});
+
+    const cursorGlow=document.getElementById("cursorGlow");
+    let glowX=window.innerWidth/2,glowY=window.innerHeight/2;
+    window.addEventListener("pointermove",e=>{
+      glowX=e.clientX;glowY=e.clientY;
+      cursorGlow.style.left=glowX+"px";cursorGlow.style.top=glowY+"px";
+    },{passive:true});
+
+    function touchRipple(e){
+      const point=e.touches&&e.touches[0]?e.touches[0]:e;
+      const el=document.createElement("span");
+      el.className="touch-ripple";el.style.left=point.clientX+"px";el.style.top=point.clientY+"px";
+      document.body.appendChild(el);setTimeout(()=>el.remove(),650);
+    }
+    window.addEventListener("touchstart",touchRipple,{passive:true});
+
+    const secretScreen=document.getElementById("secretScreen");
+    document.getElementById("secretTrigger").addEventListener("click",()=>{
+      secretScreen.classList.add("open");secretScreen.setAttribute("aria-hidden","false");
+    });
+    document.getElementById("closeSecret").addEventListener("click",()=>{
+      secretScreen.classList.remove("open");secretScreen.setAttribute("aria-hidden","true");
+    });
+    secretScreen.addEventListener("click",e=>{if(e.target===secretScreen)document.getElementById("closeSecret").click()});
+
+    document.getElementById("unlockFinal").addEventListener("click",()=>{
+      document.getElementById("finalPanel").classList.add("unlocked");celebrate();showToast("Oxirgi xabar ochildi ✦");
+    });
+
+    const birthdayDate=null;
+    const birthdayEls={days:document.getElementById("days"),hours:document.getElementById("hours"),minutes:document.getElementById("minutes"),seconds:document.getElementById("seconds"),note:document.getElementById("birthdayDateNote")};
+    function updateBirthday(){
+      if(!birthdayDate){
+        birthdayEls.note.textContent="Tug‘ilgan kun sanasi hali qo‘shilmagan — sana berilganda countdown avtomatik ishlaydi.";
+        return;
+      }
+      const diff=new Date(birthdayDate).getTime()-Date.now();
+      if(diff<=0){
+        birthdayEls.days.textContent="00";birthdayEls.hours.textContent="00";birthdayEls.minutes.textContent="00";birthdayEls.seconds.textContent="00";
+        birthdayEls.note.textContent="Bugun uning kuni. 🎂";
+        return;
+      }
+      birthdayEls.days.textContent=String(Math.floor(diff/86400000)).padStart(2,"0");
+      birthdayEls.hours.textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,"0");
+      birthdayEls.minutes.textContent=String(Math.floor(diff%3600000/60000)).padStart(2,"0");
+      birthdayEls.seconds.textContent=String(Math.floor(diff%60000/1000)).padStart(2,"0");
+    }
+    updateBirthday();setInterval(updateBirthday,1000);
+
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add("visible")}),{threshold:.18});document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));render();
   </script>
 </body>
