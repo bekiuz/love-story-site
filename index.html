@@ -342,7 +342,27 @@ let index=0;
 const $=id=>document.getElementById(id);
 const start=$("start"),answers=$("answers"),question=$("question"),hint=$("hint"),qnum=$("qnum"),counter=$("counter"),progress=$("progress"),feedback=$("feedback"),dots=$("dots"),quizBox=$("quizBox"),memoryCount=$("memoryCount");
 const giftScreen=$("giftScreen"),giftBox=$("giftBox"),giftContinue=$("giftContinue"),birthdayPanel=$("birthdayPanel"),birthdayLetter=$("birthdayLetter"),birthdayLock=$("birthdayLock");
-function go(id){$(id)?.scrollIntoView({behavior:"smooth",block:"center"})}
+function go(id){
+  const el=$(id);
+  if(!el)return;
+  el.scrollIntoView({behavior:"smooth",block:"start"});
+  if(id==="birthday"){
+    const reveal=()=>{
+      const targets=[".bday-panel .kicker",".bday-title",".bday-copy",".date-pill",".countdown",".locked",".birthday-letter"];
+      if(window.gsap){
+        gsap.set("#birthdayPanel",{opacity:1,y:0,scale:1,rotateX:0,filter:"blur(0px)"});
+        gsap.set(targets,{clearProps:"transform,opacity,filter"});
+        if(!isBirthdayToday()){
+          gsap.fromTo(targets,{y:18,opacity:0,filter:"blur(5px)"},{y:0,opacity:1,filter:"blur(0px)",duration:.55,stagger:.06,ease:"power3.out",overwrite:true});
+        }
+        if(window.ScrollTrigger)ScrollTrigger.refresh();
+      }else{
+        el.querySelectorAll(".bday-panel *").forEach(node=>{node.style.opacity="1";node.style.transform="none";node.style.filter="none"});
+      }
+    };
+    requestAnimationFrame(()=>setTimeout(reveal,120));
+  }
+}
 const scrollProgress=$("scrollProgress");
 let scrollTick=false;
 function updateScrollProgress(){
@@ -466,7 +486,12 @@ function openGift(){
 }
 giftBox.addEventListener("click",()=>giftScreen.classList.add("opening"));
 giftBox.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();giftScreen.classList.add("opening")}});
-giftContinue.addEventListener("click",()=>{giftScreen.classList.remove("open","opening");giftScreen.setAttribute("aria-hidden","true");document.body.style.overflow="";go("birthday")});
+giftContinue.addEventListener("click",()=>{
+  giftScreen.classList.remove("open","opening");
+  giftScreen.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  requestAnimationFrame(()=>go("birthday"));
+});
 
 function tashkentParts(){
   const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tashkent",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
