@@ -333,7 +333,7 @@ const memSectionObserver=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("mem-active");setTimeout(()=>entry.target.classList.remove("mem-active"),1200)}});
 },{threshold:.35});
 memSectionObserver.observe(document.querySelector(".mem-panel"));
-document.querySelectorAll(".secret-dot").forEach(dot=>dot.addEventListener("click",()=>showToast(dot.dataset.secret)));
+
 
 let toastTimer;
 function showToast(msg){
