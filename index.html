@@ -112,7 +112,7 @@ main{position:relative;z-index:2}.scene{width:min(1120px,calc(100% - 26px));min-
   <div class="bday-flare"></div>
   <div class="kicker">04 — alohida sana</div>
   <h2 class="bday-title"><span class="gradient">Tug‘ilgan kuning</span> ham bu hikoyaning bir qismi.</h2>
-  <p class="bday-copy">16-oktabr — Zuxrashning tug‘ilgan kuni. Surprise esa uning kunidan keyin, 17-oktabr 00:00 da ochiladi.</p>
+  <p class="bday-copy">16-oktabr — Zuxrashning tug‘ilgan kuni. Surprise Toshkent vaqti bilan 16-oktabr 00:00 da ochiladi.</p>
   <div class="date-pill" id="birthdayLabel">📅 16-oktabr — Zuxrashning kuni</div>
   <div class="countdown">
     <div class="time"><strong id="days">00</strong><span>kun</span></div>
@@ -120,9 +120,9 @@ main{position:relative;z-index:2}.scene{width:min(1120px,calc(100% - 26px));min-
     <div class="time"><strong id="minutes">00</strong><span>daqiqa</span></div>
     <div class="time"><strong id="seconds">00</strong><span>soniya</span></div>
   </div>
-  <div class="locked" id="birthdayLock">🔒 Surprise Toshkent vaqti bilan 17-oktabr 00:00 da ochiladi.</div>
+  <div class="locked" id="birthdayLock">🔒 Surprise Toshkent vaqti bilan 16-oktabr 00:00 da ochiladi.</div>
   <div class="birthday-letter" id="birthdayLetter">
-    <small>17 October · for Zuxrash</small>
+    <small>16 October · for Zuxrash</small>
     <h3><span class="gradient">Tug‘ilgan kuning muborak.</span></h3>
     <p>Bugun sening kuning. Men bu sahifani oddiy tabrikdan ko‘ra, bir oz boshqacha xotira qoldirish uchun tayyorladim.
     <br><br>
@@ -216,12 +216,12 @@ function tashkentParts(){
   const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tashkent",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
   const o={};parts.forEach(p=>{if(p.type!=="literal")o[p.type]=p.value});return o
 }
-function isBirthdayToday(){const p=tashkentParts();return Number(p.month)===10&&Number(p.day)===17}
-function nextBirthdayUtc(){const p=tashkentParts();let year=Number(p.year);let target=Date.UTC(year,9,17,19,0,0);if(target<=Date.now())target=Date.UTC(year+1,9,17,19,0,0);return target}
+function isBirthdayToday(){const p=tashkentParts();return Number(p.month)===10&&Number(p.day)===16}
+function nextBirthdayUtc(){const p=tashkentParts();let year=Number(p.year);let target=Date.UTC(year,9,16,19,0,0);if(target<=Date.now())target=Date.UTC(year+1,9,16,19,0,0);return target}
 function updateBirthday(){
   const today=isBirthdayToday();
   if(today){
-    birthdayPanel.classList.add("bday-live","birthday-complete");document.body.classList.add("birthday-live");birthdayLock.textContent="✦ Surprise ochildi. Zuxrashning tug‘ilgan kuni ortidan qoldirilgan maxsus sahifa.";birthdayLetter.classList.add("open");
+    birthdayPanel.classList.add("bday-live","birthday-complete");document.body.classList.add("birthday-live");birthdayLock.textContent="✦ Bugun Zuxrashning kuni. Birthday letter ochiq.";birthdayLetter.classList.add("open");
     $("days").textContent="00";$("hours").textContent="00";$("minutes").textContent="00";$("seconds").textContent="00";return
   }
   birthdayPanel.classList.remove("birthday-complete");document.body.classList.remove("birthday-live");birthdayLetter.classList.remove("open");
